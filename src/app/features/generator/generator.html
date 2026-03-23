@@ -1,0 +1,321 @@
+<div class="gen-container">
+
+  <div class="gen-header">
+    <h1>Générez votre <span class="accent">QR Code</span></h1>
+    <p>URL, texte, WiFi, email ou carte de contact — personnalisez et téléchargez</p>
+  </div>
+
+  <div class="gen-grid">
+
+    <!-- ——— Colonne gauche : formulaire ——— -->
+    <div class="gen-left">
+
+      <!-- Type de contenu -->
+      <div class="gen-card">
+        <p class="card-title">Type de contenu</p>
+        <div class="type-grid">
+
+          @for (type of qrTypes; track type.id) {
+            <div class="type-item"
+              [class.active]="selectedType === type.code"
+              (click)="selectedType = type.code; onTypeChange()">
+              <span class="type-icon">{{ getTypeIcon(type.code) }}</span>
+              <span class="type-label">{{ type.label }}</span>
+            </div>
+          }
+
+          @if (qrTypes.length === 0) {
+            @for (type of defaultTypes; track type.code) {
+              <div class="type-item"
+                [class.active]="selectedType === type.code"
+                (click)="selectedType = type.code; onTypeChange()">
+                <span class="type-icon">{{ type.icon }}</span>
+                <span class="type-label">{{ type.label }}</span>
+              </div>
+            }
+          }
+
+        </div>
+      </div>
+
+      <!-- Formulaire contenu -->
+      <div class="gen-card">
+        <p class="card-title">Contenu</p>
+
+        <form (ngSubmit)="onSubmit()">
+
+          <!-- URL -->
+          @if (selectedType === 'URL') {
+            <div class="field-group">
+              <label class="field-label">URL</label>
+              <input type="url" class="field-input"
+                placeholder="https://exemple.com"
+                [(ngModel)]="urlContent.url"
+                name="url" required />
+            </div>
+          }
+
+          <!-- TEXT -->
+          @if (selectedType === 'TEXT') {
+            <div class="field-group">
+              <label class="field-label">Texte</label>
+              <textarea class="field-input field-textarea"
+                placeholder="Votre texte ici..."
+                [(ngModel)]="textContent.text"
+                name="text" required></textarea>
+            </div>
+          }
+
+          <!-- EMAIL -->
+          @if (selectedType === 'EMAIL') {
+            <div class="field-group">
+              <label class="field-label">Destinataire</label>
+              <input type="email" class="field-input"
+                placeholder="contact@mail.com"
+                [(ngModel)]="emailContent.to"
+                name="emailTo" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Sujet</label>
+              <input type="text" class="field-input"
+                placeholder="Sujet du mail"
+                [(ngModel)]="emailContent.subject"
+                name="emailSubject" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Message</label>
+              <textarea class="field-input field-textarea"
+                placeholder="Corps du message"
+                [(ngModel)]="emailContent.body"
+                name="emailBody"></textarea>
+            </div>
+          }
+
+          <!-- WIFI -->
+          @if (selectedType === 'WIFI') {
+            <div class="field-group">
+              <label class="field-label">Nom du réseau (SSID)</label>
+              <input type="text" class="field-input"
+                placeholder="MonReseau"
+                [(ngModel)]="wifiContent.ssid"
+                name="ssid" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Mot de passe</label>
+              <input type="password" class="field-input"
+                placeholder="Mot de passe WiFi"
+                [(ngModel)]="wifiContent.password"
+                name="wifiPassword" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Chiffrement</label>
+              <div class="btn-group-row">
+                @for (enc of ['WPA','WEP','none']; track enc) {
+                  <button type="button" class="group-btn"
+                    [class.active]="wifiContent.security === enc"
+                    (click)="wifiContent.security = enc">
+                    {{ enc }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- VCARD -->
+          @if (selectedType === 'VCARD') {
+            <div class="field-row-2">
+              <div class="field-group">
+                <label class="field-label">Prénom</label>
+                <input type="text" class="field-input"
+                  placeholder="Kouame"
+                  [(ngModel)]="vcardContent.firstName"
+                  name="firstName" required />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Nom</label>
+                <input type="text" class="field-input"
+                  placeholder="Aya"
+                  [(ngModel)]="vcardContent.lastName"
+                  name="lastName" required />
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Téléphone</label>
+              <input type="tel" class="field-input"
+                placeholder="+225 07 00 00 00"
+                [(ngModel)]="vcardContent.phone"
+                name="phone" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Email</label>
+              <input type="email" class="field-input"
+                placeholder="email@exemple.com"
+                [(ngModel)]="vcardContent.email"
+                name="vcardEmail" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Entreprise</label>
+              <input type="text" class="field-input"
+                placeholder="225os"
+                [(ngModel)]="vcardContent.company"
+                name="company" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Adresse</label>
+              <input type="text" class="field-input"
+                placeholder="Abidjan"
+                [(ngModel)]="vcardContent.address"
+                name="address" />
+            </div>
+          }
+
+        </form>
+      </div>
+
+      <!-- Personnalisation -->
+      <div class="gen-card">
+        <p class="card-title">Personnalisation</p>
+
+        <!-- Couleurs -->
+        <div class="color-row">
+          <div class="color-group">
+            <label class="field-label">Couleur QR</label>
+            <div class="color-picker-row">
+              <input type="color" class="color-input"
+                [(ngModel)]="foregroundColor"
+                name="foregroundColor" />
+              <span class="color-hex">{{ foregroundColor }}</span>
+            </div>
+          </div>
+          <div class="color-group">
+            <label class="field-label">Fond</label>
+            <div class="color-picker-row">
+              <input type="color" class="color-input"
+                [(ngModel)]="backgroundColor"
+                name="backgroundColor" />
+              <span class="color-hex">{{ backgroundColor }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Presets couleurs CI -->
+        <div class="presets-row">
+          @for (preset of colorPresets; track preset.label) {
+            <button type="button" class="preset-btn"
+              [class.active]="foregroundColor === preset.fg && backgroundColor === preset.bg"
+              (click)="foregroundColor = preset.fg; backgroundColor = preset.bg">
+              <div class="preset-colors">
+                <div class="preset-dot" [style.background]="preset.fg"></div>
+                <div class="preset-dot" [style.background]="preset.bg"></div>
+              </div>
+              <span class="preset-label">{{ preset.label }}</span>
+            </button>
+          }
+        </div>
+
+        <!-- Taille -->
+        <div class="field-group">
+          <label class="field-label">Taille (px)</label>
+          <div class="btn-group-row">
+            @for (s of [256, 512, 1024]; track s) {
+              <button type="button" class="group-btn size-btn"
+                [class.active-green]="size === s"
+                (click)="size = s">
+                {{ s }}px
+              </button>
+            }
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ——— Colonne droite : prévisualisation ——— -->
+    <div class="gen-right">
+      <div class="gen-card preview-card">
+
+        <p class="field-label" style="text-align:center; letter-spacing: 1.5px; margin-bottom: 20px">
+          PRÉVISUALISATION EN DIRECT
+        </p>
+
+        <!-- QR généré -->
+        @if (generatedQr) {
+          <div class="qr-preview-wrap">
+            <img
+              [src]="'data:image/png;base64,' + generatedQr.pngBase64"
+              [alt]="'QR Code ' + generatedQr.contentType"
+              class="qr-img" />
+          </div>
+          <div class="qr-info">
+            <p class="qr-type-label">
+              {{ getTypeIcon(generatedQr.contentType) }}
+              {{ generatedQr.contentType }}
+            </p>
+            <p class="qr-size-label">
+              {{ generatedQr.size }}x{{ generatedQr.size }}px
+            </p>
+          </div>
+        }
+
+        <!-- Placeholder -->
+        @if (!generatedQr && !isLoading) {
+          <div class="qr-placeholder">
+            <div class="qr-placeholder-icon">⬛</div>
+            <p>Votre QR code apparaîtra ici</p>
+          </div>
+        }
+
+        <!-- Loader -->
+        @if (isLoading) {
+          <div class="qr-loading">
+            <div class="loader-spinner"></div>
+            <p>Génération en cours...</p>
+          </div>
+        }
+
+        <!-- Erreur -->
+        @if (errorMessage) {
+          <div class="error-box">
+            ⚠️ {{ errorMessage }}
+          </div>
+        }
+
+        <!-- Format téléchargement -->
+        @if (generatedQr) {
+          <div class="btn-group-row" style="margin-bottom: 12px">
+            @for (fmt of ['PNG','SVG']; track fmt) {
+              <button type="button" class="group-btn"
+                [class.active-green]="downloadFormat === fmt"
+                (click)="downloadFormat = fmt">
+                {{ fmt }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Boutons action -->
+        <div class="action-row">
+          <button type="button" class="btn-generate"
+            [disabled]="isLoading"
+            (click)="onSubmit()">
+            @if (isLoading) {
+              <span class="btn-spinner"></span>
+              Génération...
+            } @else {
+              🔲 Générer le QR Code
+            }
+          </button>
+          @if (generatedQr) {
+            <button type="button" class="btn-download"
+              (click)="downloadFormat === 'PNG' ? downloadPng() : downloadSvg()">
+              ⬇ {{ downloadFormat }}
+            </button>
+          }
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

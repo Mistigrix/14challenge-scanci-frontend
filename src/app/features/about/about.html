@@ -1,0 +1,63 @@
+<div class="about-container">
+
+  <!-- ——— Description ——— -->
+  <div class="about-card about-main">
+    <div class="flag-bar">
+      <div class="flag-seg orange"></div>
+      <div class="flag-seg white"></div>
+      <div class="flag-seg green"></div>
+    </div>
+    <h2 class="about-title">ScanCI</h2>
+    <p class="about-desc">
+      Jour 10 du Challenge 14-14-14. ScanCI est un générateur de QR codes personnalisables.
+      En Côte d'Ivoire, le QR code est devenu incontournable avec Orange Money, Wave et MTN Mobile Money.
+    </p>
+    <p class="about-desc">
+      Générez des QR codes pour vos URLs, contacts, réseaux WiFi ou emails.
+      Personnalisez les couleurs aux teintes de la Côte d'Ivoire et téléchargez en PNG ou SVG.
+    </p>
+  </div>
+
+
+  <!-- ——— Équipe + Stack ——— -->
+  <div class="about-grid">
+
+    <!-- Équipe -->
+    <div class="about-card">
+      <p class="section-label">L'équipe</p>
+      @for (member of team; track member.name; let last = $last) {
+        <div class="member-row" [class.last]="last">
+          <div class="member-avatar">
+            {{ getInitials(member.name) }}
+          </div>
+          <div class="member-info">
+            <p class="member-name">{{ member.name }}</p>
+            <p class="member-role">{{ member.role }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Stack -->
+    <div class="about-card">
+      <p class="section-label">Stack technique</p>
+      @for (tech of stack; track tech; let last = $last) {
+        <div class="tech-item" [class.last]="last">
+          <span class="tech-label">{{ tech }}</span>
+        </div>
+      }
+    </div>
+
+  </div>
+
+  <!-- ——— Footer ——— -->
+  <div class="about-footer">
+    <p>
+      Open Source sur
+      <a href="https://225os.com" target="_blank" class="footer-link orange">225os.com</a>
+      &amp;
+      <a href="https://github.com/bath01/14challenge-qrcode-frontend" target="_blank" class="footer-link green">GitHub</a>
+    </p>
+  </div>
+
+</div>

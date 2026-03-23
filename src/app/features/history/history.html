@@ -1,0 +1,96 @@
+<div class="hist-container">
+
+  <!-- ——— Header ——— -->
+  <div class="hist-header">
+    <div>
+      <h1>Historique</h1>
+      <p>{{ filteredHistory.length }} QR code(s) généré(s)</p>
+    </div>
+  </div>
+
+  <!-- ——— Filtres ——— -->
+  <div class="filters-row">
+    @for (filter of filters; track filter) {
+      <button class="filter-btn"
+        [class.active]="selectedFilter === filter"
+        (click)="applyFilter(filter)">
+        {{ filter === 'ALL' ? 'Tous' : filter }}
+        @if (filter === 'ALL') { <span class="filter-icon">⬛</span> }
+        @if (filter === 'URL') { <span class="filter-icon">🔗</span> }
+        @if (filter === 'TEXT') { <span class="filter-icon">📝</span> }
+        @if (filter === 'EMAIL') { <span class="filter-icon">✉️</span> }
+        @if (filter === 'WIFI') { <span class="filter-icon">📶</span> }
+        @if (filter === 'VCARD') { <span class="filter-icon">👤</span> }
+      </button>
+    }
+  </div>
+
+  <!-- ——— Erreur ——— -->
+  @if (errorMessage) {
+    <div class="error-box">⚠️ {{ errorMessage }}</div>
+  }
+
+  <!-- ——— Loader ——— -->
+  @if (isLoading) {
+    <div class="hist-loading">
+      <div class="loader-spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  }
+
+  <!-- ——— Vide ——— -->
+  @if (!isLoading && filteredHistory.length === 0) {
+    <div class="hist-empty">
+      <div class="empty-icon">📭</div>
+      <p>Aucun QR code trouvé</p>
+    </div>
+  }
+
+  <!-- ——— Grille ——— -->
+  @if (!isLoading && filteredHistory.length > 0) {
+    <div class="hist-grid">
+      @for (qr of filteredHistory; track qr.id) {
+        <div class="hist-card"
+          [class.deleting]="deletingId === qr.id">
+
+          <!-- Mini QR -->
+          <div class="qr-thumb-wrap">
+            <img
+              [src]="'data:image/png;base64,' + qr.pngBase64"
+              [alt]="'QR Code ' + qr.contentType"
+              class="qr-thumb" />
+          </div>
+
+          <!-- Infos -->
+          <div class="qr-info">
+            <div class="qr-meta-row">
+              <span class="qr-type-badge" [class]="'badge-' + qr.contentType.toLowerCase()">
+                {{ getTypeIcon(qr.contentType) }} {{ qr.contentType }}
+              </span>
+              <span class="qr-size">{{ qr.size }}px</span>
+            </div>
+            <p class="qr-date">📅 {{ formatDate(qr.createdAt) }}</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="qr-actions">
+            <button class="btn-png" (click)="downloadPng(qr)">
+              ⬇ PNG
+            </button>
+            <button class="btn-delete"
+              [disabled]="deletingId === qr.id"
+              (click)="delete(qr.id)">
+              @if (deletingId === qr.id) {
+                <span class="btn-spinner"></span>
+              } @else {
+                🗑
+              }
+            </button>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+</div>

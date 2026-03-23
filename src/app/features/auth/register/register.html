@@ -1,0 +1,100 @@
+<div class="register-page">
+
+  <div class="register-card">
+
+    <!-- ——— Logo ——— -->
+    <div class="register-logo">
+      <div class="flag-bar">
+        <div class="flag-seg orange"></div>
+        <div class="flag-seg white"></div>
+        <div class="flag-seg green"></div>
+      </div>
+      <h1 class="brand-name">Scan<span class="accent">CI</span></h1>
+      <p class="brand-sub">Rejoignez ScanCI gratuitement</p>
+    </div>
+
+    <!-- ——— Erreur ——— -->
+    @if (errorMessage) {
+      <div class="error-box">⚠️ {{ errorMessage }}</div>
+    }
+
+    <!-- ——— Formulaire ——— -->
+    <form (ngSubmit)="onSubmit()">
+
+      <div class="field-group">
+        <label class="field-label">Nom complet</label>
+        <input
+          type="text"
+          class="field-input"
+          placeholder="Kouame Aya"
+          [(ngModel)]="formData.name"
+          name="name"
+          required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input
+          type="email"
+          class="field-input"
+          placeholder="jean@mail.com"
+          [(ngModel)]="formData.email"
+          name="email"
+          required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Mot de passe</label>
+        <input
+          type="password"
+          class="field-input"
+          placeholder="Minimum 8 caractères"
+          [(ngModel)]="formData.password"
+          name="password"
+          required
+          minlength="8" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Confirmer le mot de passe</label>
+        <input
+          type="password"
+          class="field-input"
+          [class.input-error]="confirmPassword && !passwordsMatch()"
+          [class.input-success]="confirmPassword && passwordsMatch()"
+          placeholder="Répétez le mot de passe"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required />
+
+        @if (confirmPassword && !passwordsMatch()) {
+          <p class="field-hint error">✗ Les mots de passe ne correspondent pas</p>
+        }
+        @if (confirmPassword && passwordsMatch()) {
+          <p class="field-hint success">✓ Les mots de passe correspondent</p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn-register"
+        [disabled]="isLoading || !passwordsMatch()">
+        @if (isLoading) {
+          <span class="btn-spinner"></span>
+          Inscription...
+        } @else {
+          👤 S'inscrire
+        }
+      </button>
+
+    </form>
+
+    <!-- ——— Footer ——— -->
+    <p class="register-footer">
+      Déjà un compte ?
+      <a routerLink="/login" class="register-link">Se connecter</a>
+    </p>
+
+  </div>
+
+</div>

@@ -1,0 +1,80 @@
+<nav class="navbar-ci">
+  <div class="navbar-inner">
+
+    <!-- ——— Logo ——— -->
+    <a class="navbar-brand" routerLink="/generator">
+      <div class="flag-bar">
+        <div class="flag-seg orange"></div>
+        <div class="flag-seg white"></div>
+        <div class="flag-seg green"></div>
+      </div>
+      <span class="brand-name">Scan<span class="accent">CI</span></span>
+      <span class="brand-version">v1.0</span>
+    </a>
+
+    <!-- ——— Nav links (desktop) ——— -->
+    <div class="nav-links">
+      <a class="nav-link"
+        routerLink="/generator"
+        routerLinkActive="active">
+        Générateur
+      </a>
+      <a class="nav-link"
+        routerLink="/history"
+        routerLinkActive="active">
+        Historique
+      </a>
+      <a class="nav-link"
+        routerLink="/about"
+        routerLinkActive="active">
+        À propos
+      </a>
+    </div>
+
+    <!-- ——— Droite : user + logout ——— -->
+    <div class="nav-right">
+      <span class="nav-user">
+        👤 {{ getUserName() }}
+      </span>
+      <button class="btn-logout" (click)="logout()">
+        Déconnexion
+      </button>
+    </div>
+
+    <!-- ——— Hamburger mobile ——— -->
+    <button class="hamburger" (click)="menuOpen = !menuOpen">
+      {{ menuOpen ? '✕' : '☰' }}
+    </button>
+
+  </div>
+
+  <!-- ——— Menu mobile ——— -->
+  @if (menuOpen) {
+    <div class="mobile-menu">
+      <a class="mobile-link"
+        routerLink="/generator"
+        routerLinkActive="active"
+        (click)="menuOpen = false">
+        🔲 Générateur
+      </a>
+      <a class="mobile-link"
+        routerLink="/history"
+        routerLinkActive="active"
+        (click)="menuOpen = false">
+        🕐 Historique
+      </a>
+      <a class="mobile-link"
+        routerLink="/about"
+        routerLinkActive="active"
+        (click)="menuOpen = false">
+        ℹ️ À propos
+      </a>
+      <div class="mobile-divider"></div>
+      <span class="mobile-user">👤 {{ getUserName() }}</span>
+      <button class="btn-logout-mobile" (click)="logout()">
+        Déconnexion
+      </button>
+    </div>
+  }
+
+</nav>

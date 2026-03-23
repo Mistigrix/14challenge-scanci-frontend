@@ -1,0 +1,68 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <!-- ——— Logo ——— -->
+    <div class="login-logo">
+      <div class="flag-bar">
+        <div class="flag-seg orange"></div>
+        <div class="flag-seg white"></div>
+        <div class="flag-seg green"></div>
+      </div>
+      <h1 class="brand-name">Scan<span class="accent">CI</span></h1>
+      <p class="brand-sub">Connectez-vous à votre compte</p>
+    </div>
+
+    <!-- ——— Erreur ——— -->
+    @if (errorMessage) {
+      <div class="error-box">⚠️ {{ errorMessage }}</div>
+    }
+
+    <!-- ——— Formulaire ——— -->
+    <form (ngSubmit)="onSubmit()">
+
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input
+          type="email"
+          class="field-input"
+          placeholder="jean@mail.com"
+          [(ngModel)]="credentials.email"
+          name="email"
+          required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Mot de passe</label>
+        <input
+          type="password"
+          class="field-input"
+          placeholder="••••••••"
+          [(ngModel)]="credentials.password"
+          name="password"
+          required />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-login"
+        [disabled]="isLoading">
+        @if (isLoading) {
+          <span class="btn-spinner"></span>
+          Connexion...
+        } @else {
+          🔐 Se connecter
+        }
+      </button>
+
+    </form>
+
+    <!-- ——— Footer ——— -->
+    <p class="login-footer">
+      Pas encore de compte ?
+      <a routerLink="/register" class="login-link">S'inscrire</a>
+    </p>
+
+  </div>
+
+</div>
